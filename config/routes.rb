@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   # === API v1 ここから ===
   namespace :api do
     namespace :v1 do
-      resources :jobs, defaults: { format: :json }
+      # 必要なアクションだけ許可
+      resources :jobs, only: [:index, :show, :create], defaults: { format: :json }
     end
   end
-
 end
+
