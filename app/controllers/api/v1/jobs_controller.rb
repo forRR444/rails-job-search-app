@@ -1,7 +1,7 @@
 class Api::V1::JobsController < ApplicationController
-  #求人を全部一覧で示す
+  #求人を全部一覧で示す(新着順)
   def index
-    render json: Job.all
+    render json: Job.order(created_at: :desc)
   end
 
   #求人をIDで検索して表示
@@ -19,7 +19,7 @@ class Api::V1::JobsController < ApplicationController
     end
   end
 
-  #セキュリティ
+  #セキュリティ(3項目のみの入力を許可)
   private
   def job_params
   params.require(:job).permit(:title, :category, :salary)

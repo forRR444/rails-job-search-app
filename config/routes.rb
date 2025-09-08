@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  # Health check (そのまま残してOK)
+  # Health check (サーバーがきちんと動いているか)
   get "up" => "rails/health#show", as: :rails_health_check
 
   # === API v1 ここから ===
@@ -10,4 +10,3 @@ Rails.application.routes.draw do
     end
   end
 end
-
