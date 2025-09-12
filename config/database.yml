@@ -1,11 +1,6 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: 127.0.0.1
-  port: 5432
-  username: <%= ENV.fetch("PGUSER", "postgres") %>
-  password: <%= ENV.fetch("PGPASSWORD", "") %>
-  pool: 5
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
   <<: *default
@@ -16,7 +11,5 @@ test:
   database: backend_test
 
 production:
-  <<: *default
-  database: backend_production
-  username: <%= ENV.fetch("PGUSER", "postgres") %>
-  password: <%= ENV.fetch("PGPASSWORD", "") %>
+  primary: *default
+  cable: *default
