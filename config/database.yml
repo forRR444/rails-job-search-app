@@ -1,20 +1,26 @@
+# config/database.yml
+
+# 開発/テスト用（ローカル Postgres）
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV["PGUSER"] || "postgres" %>
-  password: <%= ENV["PGPASSWORD"] || "" %>
-  host: <%= ENV["PGHOST"] || "localhost" %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
   <<: *default
   database: myapp_development
+  host: <%= ENV["PGHOST"] || "localhost" %>
+  username: <%= ENV["PGUSER"] || "postgres" %>
+  password: <%= ENV["PGPASSWORD"] || "" %>
 
 test:
   <<: *default
   database: myapp_test
+  host: <%= ENV["PGHOST"] || "localhost" %>
+  username: <%= ENV["PGUSER"] || "postgres" %>
+  password: <%= ENV["PGPASSWORD"] || "" %>
 
+# 本番（Heroku）は DATABASE_URL のみを使う。defaultは継承しない！
 production:
-  <<: *default
-  adapter: postgresql
-  url: <%= ENV["DATABASE_URL"] %>
+  url: <%= ENV.fetch("DATABASE_URL") %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
