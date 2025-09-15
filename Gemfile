@@ -11,7 +11,7 @@ gem "puma", ">= 5.0"
 
 # その他のGem
 gem "bootsnap", require: false
-gem "rack-cors", "~> 2.0"
+gem "rack-cors", "~> 2.0", require: "rack/cors"
 gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
