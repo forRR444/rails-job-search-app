@@ -1,6 +1,3 @@
-# config/database.yml
-
-# 開発/テスト用（ローカル Postgres）
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -9,18 +6,20 @@ default: &default
 development:
   <<: *default
   database: myapp_development
-  host: <%= ENV["PGHOST"] || "localhost" %>
   username: <%= ENV["PGUSER"] || "postgres" %>
   password: <%= ENV["PGPASSWORD"] || "" %>
+  host: <%= ENV["PGHOST"] || "localhost" %>
 
 test:
   <<: *default
   database: myapp_test
-  host: <%= ENV["PGHOST"] || "localhost" %>
   username: <%= ENV["PGUSER"] || "postgres" %>
   password: <%= ENV["PGPASSWORD"] || "" %>
+  host: <%= ENV["PGHOST"] || "localhost" %>
 
-# 本番（Heroku）は DATABASE_URL のみを使う。defaultは継承しない！
 production:
-  url: <%= ENV.fetch("DATABASE_URL") %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  url: <%= ENV["DATABASE_URL"] %>
+
+  # ActionCable (solid_cable用)
+  cable:
+    url: <%= ENV["DATABASE_URL"] %>
