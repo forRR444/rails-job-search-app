@@ -5,7 +5,6 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
-  # 開発は全部同じローカルDBを使う（必要なら分けてもOK）
   primary: &dev_primary
     <<: *default
     database: myapp_development
@@ -16,9 +15,10 @@ development:
     <<: *dev_primary
   queue:
     <<: *dev_primary
+  cache:
+    <<: *dev_primary
 
 test:
-  # テストも同じDB設定を流用
   primary: &test_primary
     <<: *default
     database: myapp_test
@@ -29,13 +29,16 @@ test:
     <<: *test_primary
   queue:
     <<: *test_primary
+  cache:
+    <<: *test_primary
 
 production:
-  # 本番は Heroku の DATABASE_URL を3つとも参照
   primary: &prod_primary
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
   cable:
     <<: *prod_primary
   queue:
+    <<: *prod_primary
+  cache:
     <<: *prod_primary
