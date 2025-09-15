@@ -1,25 +1,42 @@
+# config/database.yml
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
-  <<: *default
-  database: myapp_development
-  username: <%= ENV["PGUSER"] || "postgres" %>
-  password: <%= ENV["PGPASSWORD"] || "" %>
-  host: <%= ENV["PGHOST"] || "localhost" %>
+  primary:
+    <<: *default
+    database: myapp_development
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    username: <%= ENV.fetch("PGUSER", "postgres") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
+  cable:
+    <<: *default
+    database: myapp_development_cable
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    username: <%= ENV.fetch("PGUSER", "postgres") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
 
 test:
-  <<: *default
-  database: myapp_test
-  username: <%= ENV["PGUSER"] || "postgres" %>
-  password: <%= ENV["PGPASSWORD"] || "" %>
-  host: <%= ENV["PGHOST"] || "localhost" %>
+  primary:
+    <<: *default
+    database: myapp_test
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    username: <%= ENV.fetch("PGUSER", "postgres") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
+  cable:
+    <<: *default
+    database: myapp_test_cable
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    username: <%= ENV.fetch("PGUSER", "postgres") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
 
 production:
-  url: <%= ENV["DATABASE_URL"] %>
-
-  # ActionCable (solid_cable用)
+  # 本番は Heroku の DATABASE_URL を使う（Primary も Cable も同じアドオンを利用）
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
   cable:
+    <<: *default
     url: <%= ENV["DATABASE_URL"] %>
