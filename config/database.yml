@@ -5,38 +5,37 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
-  primary:
+  # 開発は全部同じローカルDBを使う（必要なら分けてもOK）
+  primary: &dev_primary
     <<: *default
     database: myapp_development
-    host: <%= ENV.fetch("PGHOST", "localhost") %>
-    username: <%= ENV.fetch("PGUSER", "postgres") %>
-    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    host: <%= ENV["PGHOST"] || "localhost" %>
+    username: <%= ENV["PGUSER"] || "postgres" %>
+    password: <%= ENV["PGPASSWORD"] || "" %>
   cable:
-    <<: *default
-    database: myapp_development_cable
-    host: <%= ENV.fetch("PGHOST", "localhost") %>
-    username: <%= ENV.fetch("PGUSER", "postgres") %>
-    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    <<: *dev_primary
+  queue:
+    <<: *dev_primary
 
 test:
-  primary:
+  # テストも同じDB設定を流用
+  primary: &test_primary
     <<: *default
     database: myapp_test
-    host: <%= ENV.fetch("PGHOST", "localhost") %>
-    username: <%= ENV.fetch("PGUSER", "postgres") %>
-    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    host: <%= ENV["PGHOST"] || "localhost" %>
+    username: <%= ENV["PGUSER"] || "postgres" %>
+    password: <%= ENV["PGPASSWORD"] || "" %>
   cable:
-    <<: *default
-    database: myapp_test_cable
-    host: <%= ENV.fetch("PGHOST", "localhost") %>
-    username: <%= ENV.fetch("PGUSER", "postgres") %>
-    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    <<: *test_primary
+  queue:
+    <<: *test_primary
 
 production:
-  # 本番は Heroku の DATABASE_URL を使う（Primary も Cable も同じアドオンを利用）
-  primary:
+  # 本番は Heroku の DATABASE_URL を3つとも参照
+  primary: &prod_primary
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
   cable:
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    <<: *prod_primary
+  queue:
+    <<: *prod_primary
