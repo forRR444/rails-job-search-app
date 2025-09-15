@@ -331,7 +331,6 @@ DEPENDENCIES
   solid_cache
   solid_queue
   thruster
-  tzinfo-data
 
 RUBY VERSION
    ruby 3.4.5p51
