@@ -2,14 +2,19 @@ default: &default
   url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
-development:
-  <<: *default
-  database: backend_development
-
-test:
-  <<: *default
-  database: backend_test
-
 production:
-  primary: *default
-  cable: *default
+  primary: &primary
+    <<: *default
+
+  # 以下は同じDATABASE_URLを使い回し（別DBを用意しなくてOK）
+  cache:
+    <<: *default
+    database_tasks: false
+
+  queue:
+    <<: *default
+    database_tasks: false
+
+  cable:
+    <<: *default
+    database_tasks: false
